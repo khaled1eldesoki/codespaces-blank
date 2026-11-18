@@ -1,0 +1,14 @@
+import { createWorker } from 'tesseract.js';
+const EN = ['Staff', 'ID', 'Department', 'Training', 'subject', 'Trainer', 'Place', 'Comments', 'Assessment', 'Satisfactory', 'Section', 'Trainee', 'details', 'Attendance', 'Evaluation', 'Form', 'Egyptian', 'Doping', 'Control', 'Laboratory', 'FO-TEST-001'];
+const AR = ['الرقم', 'الوظيفي', 'القسم', 'التاريخ', 'المدرب', 'المكان', 'ملاحظات', 'التقييم', 'المتدرب', 'نموذج', 'حضور', 'وتقييم', 'التدريب', 'الاسم', 'التوقيع'];
+const norm = s => s.replace(/[\u064B-\u0652\u0640]/g, '').replace(/[أإآ]/g, 'ا').replace(/[^\p{L}\p{N}-]/gu, '');
+let t0 = Date.now(); const worker = await createWorker(['eng', 'ara'], 1, { langPath: '/tmp/fe/lang', gzip: true, cachePath: '/tmp/fe/tcache', logger: () => {} }); const tInit = Date.now() - t0;
+t0 = Date.now(); const { data } = await worker.recognize('/tmp/fe/forms/scanpage-1.png', {}, { blocks: true }); const tRec = Date.now() - t0;
+const words = (data.blocks || []).flatMap(b => b.paragraphs.flatMap(p => p.lines.flatMap(l => l.words))).map(w => ({ t: w.text, c: Math.round(w.confidence), b: w.bbox }));
+const got = new Set(words.map(w => norm(w.t)));
+const hit = list => list.filter(x => [...got].some(g => g && (g === norm(x) || (norm(x).length > 3 && g.includes(norm(x)))))); const eh = hit(EN), ah = hit(AR);
+console.log(`init ${tInit} ms, recognise 1 A4 page @200dpi ${tRec} ms, words ${words.length}, mean confidence ${Math.round(words.reduce((s, w) => s + w.c, 0) / words.length)}`);
+console.log(`English labels found: ${eh.length}/${EN.length}  missing: ${EN.filter(x => !eh.includes(x)).join(', ') || 'none'}`);
+console.log(`Arabic labels found:  ${ah.length}/${AR.length}  missing: ${AR.filter(x => !ah.includes(x)).join(', ') || 'none'}`);
+const d = words.find(w => /^Department/i.test(w.t)); if (d) console.log(`bbox of "Department": px ${JSON.stringify(d.b)} -> PDF points x=${(d.b.x0 / 200 * 72).toFixed(0)} y_top=${(d.b.y0 / 200 * 72).toFixed(0)} (reference position from the static PDF: x=51 y=656 from bottom => y_top≈${(841.89 - 656 - 10).toFixed(0)}, scan is rotated 0.7° and padded)`);
+await worker.terminate();

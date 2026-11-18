@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b5cab">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="style.css">
+<title>EDCL Lab - Viewer</title>
+</head><body>
+<div id="login" class="screen hidden">
+  <h1>EDCL Lab</h1><p class="muted">Read-only viewer</p>
+  <input id="u" autocomplete="username" autocapitalize="none" placeholder="Username">
+  <input id="p" type="password" autocomplete="current-password" placeholder="Password">
+  <button id="go" class="primary">Sign in</button>
+  <p id="lerr" class="err"></p>
+</div>
+<div id="chpw" class="screen hidden">
+  <h1>Change password</h1><p class="muted">Required before first use.</p>
+  <input id="op" type="password" autocomplete="current-password" placeholder="Current (one-time) password">
+  <input id="np" type="password" autocomplete="new-password" placeholder="New password">
+  <button id="cg" class="primary">Save</button><p id="cerr" class="err"></p>
+</div>
+<div id="app" class="hidden">
+  <header><b id="title">Dashboard</b><span id="status" class="muted"></span><button id="out" class="link">Sign out</button></header>
+  <main id="view"></main>
+  <nav>
+    <button data-t="dash" class="on">Dashboard</button>
+    <button data-t="emp">Employees</button>
+    <button data-t="auth">Authorizations</button>
+    <button data-t="alerts">Alerts<i id="badge" class="badge hidden"></i></button>
+  </nav>
+  <div id="sheet" class="sheet hidden"><div class="card"><button id="close" class="link">Close</button><div id="sheetbody"></div></div></div>
+</div>
+<script src="app.js"></script>
+</body></html>

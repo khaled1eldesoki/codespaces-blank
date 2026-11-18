@@ -1,0 +1,10 @@
+const { app, BrowserWindow } = require('electron'); app.setPath('userData', '' + (process.env.USERDATA || '/tmp/edcl-userdata') + ''); app.disableHardwareAcceleration();
+require('' + (process.env.MAINJS || (process.env.APP_ROOT || process.cwd()) + '/main.js') + ''); const sleep = ms => new Promise(r => setTimeout(r, ms));
+app.whenReady().then(async () => { await sleep(6500); const w = BrowserWindow.getAllWindows()[0]; const run = c => w.webContents.executeJavaScript(c, true);
+  const t0 = Date.now(); const r = JSON.parse(await run('edclDesktop.wada.check().then(JSON.stringify)')); console.log('check():', r.status, 'failedSources=' + r.failedSources, Math.round((Date.now() - t0) / 1000) + 's');
+  const h = JSON.parse(await run('edclDesktop.wada.history().then(JSON.stringify)')); console.log('runs:', h.runs.map(x => x.status + '/' + x.failed_sources).join(','), '| errors logged:', h.errors.length);
+  const urls = [...new Set(h.errors.map(e => e.source_url))]; console.log('sources attempted:\n  ' + urls.join('\n  '));
+  const e = h.errors[0]; console.log('first error:', e.category, '|', e.stage, '|', e.at, '|', e.message.slice(0, 80)); console.log('action:', e.action);
+  const st = JSON.parse(await run('edclDesktop.wada.status().then(JSON.stringify)')); console.log('lastSuccess:', st.lastSuccess, '| lastRun:', st.lastRun.status, '| notice:', st.offlineNotice);
+  console.log('items shown while offline:', JSON.parse(await run('edclDesktop.wada.items({}).then(JSON.stringify)')).length, '| verify api:', await run('typeof edclDesktop.wada.verify'));
+  app.exit(0); });

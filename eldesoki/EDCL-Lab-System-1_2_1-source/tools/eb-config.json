@@ -1,0 +1,28 @@
+{
+  "appId": "eg.edcl.labsystem",
+  "productName": "EDCL Lab System",
+  "copyright": "Egyptian Doping Control Laboratory",
+  "electronVersion": "35.7.5",
+  "npmRebuild": false,
+  "asar": true,
+  "asarUnpack": ["node_modules/better-sqlite3/**"],
+  "electronLanguages": ["en-US", "ar"],
+  "directories": { "buildResources": "build", "output": "dist-eb" },
+  "files": ["**/*", "!**/*.map", "!build/**", "!dist-eb/**"],
+  "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "icon": "build/icon.ico", "signAndEditExecutable": false, "artifactName": "EDCL-Client-Setup.exe" },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "EDCL Lab System",
+    "uninstallDisplayName": "EDCL Lab System ${version}",
+    "runAfterFinish": true,
+    "installerIcon": "build/icon.ico",
+    "uninstallerIcon": "build/icon.ico",
+    "include": "build/installer.nsh"
+  }
+}

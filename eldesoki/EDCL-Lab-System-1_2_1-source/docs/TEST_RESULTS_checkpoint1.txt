@@ -1,0 +1,39 @@
+Recorded 2026-10-23T10:37:59Z in /home/claude/handover/EDCL-Lab-System (clean npm install, Node v22.22.2, Linux sandbox)
+
+ok 1 - A1 news parser: real listing structure -> clean titles, dates, types, canonical URLs, no duplicates
+ok 2 - A2 resource-page parser (Prohibited List): publication date, status, current download, og:updated_time, documents
+ok 3 - A3 index parser (International Standards): TDs, TLs, guidelines and standards with descriptions; no duplicates; fragments removed
+ok 4 - A4 resource-page parser (Technical Documents Index): current download and archive versions
+ok 5 - A5 all four configured source URLs are the official addresses captured from wada-ama.org (none guessed)
+ok 6 - A6 URL canonicalisation: tracking parameters, fragments, trailing slashes, http and foreign hosts
+ok 7 - B1 baseline run over all four sources: ok, items recorded, nothing announced, history accurate
+ok 8 - C1 HTTP 404 on every source: failed run, 1 attempt each, actionable error rows, no success recorded
+ok 9 - C2 network failure: classified, retried with exponential backoff, then fails fast on remaining sources; never "ok"
+# Subtest: C3 empty results: HTTP 200 with a page that has no items is a FAILED check (parse_failed), not a success
+ok 10 - C3 empty results: HTTP 200 with a page that has no items is a FAILED check (parse_failed), not a success
+ok 11 - C4 changed page structures are detected for each parser kind (news, index, resource)
+ok 12 - C5 duplicate news items: repeated anchors, tracking params, trailing slash and image-only anchors yield one record and one notification
+ok 13 - C6 sync history is accurate for success, partial and failed runs; lastSuccess only moves on a fully successful run
+# Subtest: C7 403 and 202 challenge are permanent, not retried, not bypassed; off-site redirect rejected
+ok 14 - C7 403 and 202 challenge are permanent, not retried, not bypassed; off-site redirect rejected
+ok 15 - C8 503 x2 then 200: retried with backoff, run ok, no duplicate records
+ok 16 - C9 timeout and cancellation; duplicate-request prevention
+ok 17 - C10 error classification covers Chromium and Node error texts
+ok 18 - D1 structured change (publication date + current download) is DETECTED, announced once, and stays UNVERIFIED
+ok 19 - D2 metadata-only change (og:updated_time) is recorded as a version but NOT announced as a change
+ok 20 - D3 text edits are graded by size: small edit below threshold = minor (silent), larger edit = "text" change announced, with the measured percentage
+ok 21 - D4 verification is a human decision: default unverified, requires a user, can be changed, and is reset by the next detected change
+ok 22 - D5 no code path produces a "verified" state automatically: after many varied changes every item is unverified
+ok 23 - D6 news item with an edited title: change detected (possible), one notification, unverified
+ok 24 - E1 new item after baseline -> exactly one notification and one desktop notification; unchanged recheck -> none
+ok 25 - E2 notifications, history, read status and preferences persist across restart
+ok 26 - E3 migration v1 -> v2 keeps existing data; retired (guessed) sources are hidden, not deleted
+ok 27 - E4 category preferences, interval validation, scheduler due()
+ok 28 - E5 document download validates host, type and content; never executes
+ok 29 - E6 a run left "running" by a crash is closed as "interrupted" at startup and is never counted as a success
+# tests 29
+# pass 29
+# fail 0
+  ok   Certificate reported Expired when its expiry date has passed
+51 passed, 0 failed
+28 passed, 0 failed

@@ -1,0 +1,11 @@
+<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="sd-style.css">
+<style>body{margin:0;background:#eee}#tb{background:#fff}#sd{height:900px}</style><div id="tb"></div><div id="sd"></div>
+<script src="sd-bundle.js"></script>
+<script>
+window.__log=[];
+(async()=>{try{
+const buf=await (await fetch('file:///tmp/fe/forms/FO-TEST-001.docx')).arrayBuffer();
+const file=new File([buf],'FO-TEST-001.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+window.__sd=new SuperDoc({selector:'#sd',toolbar:'#tb',document:file,documentMode:'editing',onReady:()=>{window.__ready=true},onException:e=>window.__log.push('EXC '+(e&&e.error&&e.error.message||e))});
+}catch(e){window.__log.push('LOADERR '+e.message)}})();
+</script>

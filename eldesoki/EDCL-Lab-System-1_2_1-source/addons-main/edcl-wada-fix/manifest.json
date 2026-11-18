@@ -1,0 +1,23 @@
+{
+ "addon": "edcl-wada-fix",
+ "version": "2.1.2",
+ "installedAt": "2026-11-15T18:17:39.280Z",
+ "hostVersion": "1.0.15",
+ "original": {
+  "main.js": "54ac9002b7673a0aaff35fc6e4a181d88609e3aad97372aab7c0636da9c319e3",
+  "preload.js": "d94cb5cc9b949aa121d79bec52795c1eb353f82edb589ae08f2d55eb83351cfa",
+  "app/index.html": "e2825022b14ded993e5d9b152fe97ec1dabcd2eac05ecb4eb608f1e458b38092"
+ },
+ "files": {
+  "addons-main/edcl-wada-fix/wada-copies.js": "e4a6490ca768b071b9d9b467e91080603bfb4f93265bf0ce17b7fc45edf6557c",
+  "addons-main/edcl-wada-fix/wada-fix-bootstrap.js": "7a6c66e312031bf9937063a682fc3705eddcbdd6dd1b07d3bb6900c7e0948111",
+  "addons-main/edcl-wada-fix/wada-net.js": "681279381d49b7e16f6107119bf96b6c10978db5de31dbd466a987adc56c6eec",
+  "addons-main/edcl-wada-fix/wada-watch.js": "5728d3a7526efca2baad007ae685b2dc438be362df9e7296485d2162ec446628",
+  "app/addons/edcl-wada-fix/loader.js": "490a045428721f665adf92c54f3d00e5886ea9ec249f9c1f40ebe9f58d1b3a44",
+  "app/addons/edcl-wada-fix/wada-fix-ui.js": "7e21959bb6ac36cf1299da488dd8ebd2b1ab8f15c659d5742ca761e087c8a646"
+ },
+ "retiredOldAddon": null,
+ "edits": 2,
+ "updatedAt": "2026-11-15T18:18:47.349Z",
+ "previousVersion": "2.1.2"
+}

@@ -1,0 +1,26 @@
+ok   server: certificates created
+ok   server: migration import of the legacy backup  ["records": 1681]
+ok   legacy password accepted once for qa.a and flagged for change
+ok   password changed (>=10 chars, scrypt)
+ok   legacy password accepted once for qa.b and flagged for change
+ok   password changed (>=10 chars, scrypt)
+ok   both workstations finished phase 1 (sign-in, edit, upload, cross-visibility)
+ok   server restarted on the same data after an outage
+ok   A: real login through the app UI against the HTTPS server (private CA, no Windows trust store)
+ok   B: real login
+ok   both received the central data (18 employees)
+ok   screens (emp, docs, train, auth, backup, users) open without error in server mode
+ok   B sees A's edit
+ok   B downloads A's uploaded file from the server with identical content  [100017:PDF-bytes-from-A]
+ok   A sees B's edit AND keeps its own (different fields of the same record)
+ok   A sees B's uploaded file
+ok   A shows "server unreachable" while the server is down
+ok   A's edit made during the outage is delivered after the server returns, status back to connected
+ok   B receives the edit that was made during the outage
+ok   no script errors reported by either window  [[[],[]]]
+ok   server holds exactly one copy of each uploaded file
+ok   password hashes were never written to shared records
+
+Electron v35.7.5, Linux/xvfb, 2026-11-18T06:33:39.770Z
+A log: {"started":true,"login-screen":true,"signed-in":true,"user":"qa.a","central-on":true,"employees-loaded":18,"badge":"● Connected to server · saved","screens-ok":true,"A-wrote":true,"A-sees-B-field":true,"A-sees-B-file":true,"phase1-done":true,"A-offline-badge":true,"A-synced-after-return":true,"sync-log":[],"console-errors":[],"alerts":["Done: 5 packages, 34 files, 5 TRQ numbers added.","Done: 28 training records and 51 files added."],"done":true}
+B log: {"started":true,"login-screen":true,"signed-in":true,"user":"qa.b","central-on":true,"employees-loaded":18,"badge":"● Connected to server · saved","screens-ok":true,"B-sees-A-field":true,"B-sees-A-file":true,"B-file-bytes":"100017:PDF-bytes-from-A","B-wrote":true,"phase1-done":true,"B-sees-offline-edit":true,"sync-log":[],"console-errors":[],"alerts":["Done: 3 packages, 30 files, 3 TRQ numbers added.","Done: 0 packages, 30 files, 0 TRQ numbers added."],"done":true}

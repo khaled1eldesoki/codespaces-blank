@@ -1,0 +1,26 @@
+{
+ "addon": "edcl-ai-hybrid",
+ "version": "2.0.0",
+ "installedAt": "2026-11-08T19:09:47.169Z",
+ "hostVersion": "1.0.15",
+ "original": {
+  "main.js": "ed9eba2ef888602aa4260aeff4c47dfb2090ffe21c4c2a75cdaa1a353644fc9a",
+  "preload.js": "21c16333b636490532a8f8d106d587e8ebf3a1bd23b97b5818d3de5bf189724b",
+  "app/index.html": "ba6d9304f2de980a68f035abffc27ce1cf98aabf7f13006119fc714cedc936b0"
+ },
+ "files": {
+  "addons-main/edcl-ai-hybrid/bootstrap.js": "7755b66be1e9a8800564c84557ead4beafb59847913026648ce9a33395e3dd6f",
+  "addons-main/edcl-ai-hybrid/hybrid-net.js": "d4de71a65961b5ea5092004a705a90595b54d66b1fe03fc9541a15863263851d",
+  "addons-main/edcl-ai-hybrid/local-llm.js": "44ee2fe08293b793ca10a820988d459459da259df54f776230a02a864c8c1c0a",
+  "addons-main/edcl-ai-hybrid/privacy-gateway.js": "ef48a5740e3766e4b2179df6eba381d27c1ca870980c5a2c89464a9a8ba21360",
+  "addons-main/edcl-ai-hybrid/wada-archive.js": "16b134b87e30a6fda6ef900dd7710e53301b62b60594d7622c1d3ee9f2e4e913",
+  "app/addons/edcl-ai-hybrid/edcl-ai-hybrid.js": "0eddded7593fd47df1e2899c5d87cb5ead2f2e6b4eddb96652a33d5c3879f074",
+  "app/addons/edcl-ai-hybrid/hybrid-core.js": "6a9ac0a3c1ee2e43967d8dcd4b4fc4774f0fcab295c1b789b4fe50400370dee3",
+  "app/addons/edcl-ai-hybrid/loader.js": "6e31ef15c6f836cc133583ffa3033e154171344b841779bc36a70df484ace296",
+  "app/addons/edcl-ai-hybrid/wada-docs-ui.js": "76a7967004bb13fa2fe242cd2c2b63824acaadfd0e974640811fbc44e486f776"
+ },
+ "retiredOldAddon": {
+  "index": 972388,
+  "text": "<script src=\"addons/edcl-ai/edcl-ai.js\"></script>\n"
+ }
+}

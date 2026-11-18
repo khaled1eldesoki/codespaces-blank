@@ -1,0 +1,40 @@
+{
+  "name": "edcl-lab-system",
+  "productName": "EDCL Lab System",
+  "version": "1.2.1",
+  "description": "EDCL Laboratory Management System - Quality & Competency",
+  "author": "Egyptian Doping Control Laboratory",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "test:monitor": "node --test tests/wada-monitor.test.js",
+    "test:ui": "node tests/ui-competency.test.js",
+    "test:persistence": "node tests/competency-persistence.test.js",
+    "test:engine": "node --test tests/forms-engine.test.js",
+    "test:server": "node --test \"tests/server/*.test.js\"",
+    "test": "npm run test:monitor && npm run test:ui && npm run test:persistence && npm run test:engine && npm run test:server",
+    "build:portable": "bash tools/make-portable.sh",
+    "build:vendor": "bash tools/build-vendor.sh",
+    "server:start": "node server/cli.js start",
+    "test:e2e": "xvfb-run -a node tests/electron/central-e2e.js",
+    "build:installers": "bash tools/build-installers.sh"
+  },
+  "dependencies": {
+    "better-sqlite3": "13.0.3",
+    "node-forge": "^1.4.3"
+  },
+  "devDependencies": {
+    "@electron/asar": "^4.3.1",
+    "@pdf-lib/fontkit": "^1.1.1",
+    "@tesseract.js-data/ara": "^1.0.0",
+    "@tesseract.js-data/eng": "^1.0.0",
+    "bidi-js": "^1.1.0",
+    "esbuild": "^0.28.2",
+    "fake-indexeddb": "6.2.6",
+    "jsdom": "24.1.3",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^3.11.174",
+    "tesseract.js": "^7.0.0",
+    "tesseract.js-core": "^7.0.0"
+  }
+}

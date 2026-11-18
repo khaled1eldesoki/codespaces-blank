@@ -1,0 +1,2 @@
+Evidence from the evaluation run (Linux sandbox, 2026-10-21). experiments/ = the exact scripts used (Node 22, pdf-lib, pdf.js, tesseract.js, SuperDoc 1.47.2 bundled with esbuild, Electron 44.9.2 headless).
+evidence/ = rendered outputs: compare.png (our PDF text engine left vs Chromium right), FILL-TEST-filled-1.png, FO-TEST-001-overlay-1.png, edited-1.png (DOCX edited in SuperDoc and rendered by LibreOffice), exported.docx.

@@ -1,0 +1,117 @@
+Checkpoint 2 results, recorded 2026-10-29T21:11:36Z. Linux sandbox, Node v22.22.2.
+
+=== npm test (monitor, UI/competency/WADA screens, persistence+backup/restore, forms engine bundle)
+# Subtest: C7 403 and 202 challenge are permanent, not retried, not bypassed; off-site redirect rejected
+ok 14 - C7 403 and 202 challenge are permanent, not retried, not bypassed; off-site redirect rejected
+# tests 29
+# pass 29
+# fail 0
+  ok   Certificate reported Expired when its expiry date has passed
+51 passed, 0 failed
+28 passed, 0 failed
+# tests 6
+# pass 6
+# fail 0
+
+=== In-app forms test on the PACKAGED app.asar, Electron 35.7.5 under Xvfb (tests/electron/forms-pdf.js)
+ok   1a import fillable / static / scanned PDF templates  [pages 1/3/1]
+ok   1b stored SHA-256 equals the SHA-256 of the file on disk
+ok   1c native fields detected by the bundled pdf.js 3.11.174: 9 / 0 / 0  [9/0/0]
+ok   1d exact duplicate import rejected
+ok   1e Word files rejected with an honest message
+ok   1f a non-PDF renamed .pdf is rejected by content
+ok   2a instance created for the employee with the related training record  [TR-0001]
+ok   2b related record of ANOTHER employee is rejected
+ok   2c link rows written (FormLinks)
+ok   3a editor shows the 9 native widgets as inputs
+ok   3b user-placed text box created
+ok   3c first revision saved as a separate file (master untouched)  [880768f36a82]
+ok   3d master template still has its original SHA-256 (verifyMaster)
+ok   3e completed copy is a valid PDF  [37885 bytes]
+ok   4 reopen restores typed values, checkbox, dropdown, radio and the text box  [{"id":"EMP001","name":"محمد أحمد عبد العظيم","chk":true,"sel":"Competent","rad":[false,true],"ov":1,"ovt":"ملاحظة: Overl]
+ok   5a static 3-page PDF completed copy saved; instance status Completed
+ok   6a OCR ran inside the app on the scanned page (English + Arabic)  [{"n":82,"ms":5103,"has":["Staff","Training","Assessment"],"ar":28}]
+ok   6b scanned form completed copy saved with an OCR-placed text box
+ok   7a print HTML built from the completed copy (3 page images, A4 page size)  [834284 chars]
+ok   7b print pipeline produced a PDF from the completed copy
+ok   8a completed forms are registered as employee documents (DocMeta) and visible to the competency evidence picker
+ok   8b employee profile lists the filled forms
+ok   8c form tables are part of the backup data set
+ok   9a staff role cannot create a form
+ok   9b staff cannot open another employee's form
+ok   9c staff cannot import templates
+ok   10a tampered master is detected and new forms from it are refused
+ok   10b after restoring the original bytes the master verifies again
+ALL PASSED
+
+=== Independent verification of the produced PDFs (tests/electron/forms-pdf-verify.py)
+ok   static: same page count as master  [3/3]
+ok   static: page 1 pixels changed OUTSIDE the filled boxes = 0  [0 px outside, 4032 px inside]
+ok   static: filled boxes actually changed (text drawn)  [4032 px]
+ok   static: page 2 identical to master
+ok   static: page 3 identical to master
+ok   static: typed English values are real, searchable text
+ok   static: Arabic text present in the PDF text layer
+ok   static: fonts are embedded  [NotoNaskhArabic-Regular-6235         CID TrueType      Ident]
+ok   fillable: same page count as master  [1/1]
+ok   fillable: page 1 pixels changed OUTSIDE the filled boxes = 0  [0 px outside, 16329 px inside]
+ok   fillable: filled boxes actually changed (text drawn)  [16329 px]
+ok   fillable: typed values are real text (ID, date, dropdown choice, English part of the mixed subject)
+ok   fillable: completed copy no longer contains form fields (flattened, layout fixed)
+ok   scanned: only a small area changed (the OCR-placed text box)  [749 px = 0.075% of the page; bbox x 145-283 y 214-228]
+ok   print: same number of pages as the completed copy  [3 vs 3]
+ok   print: page size equals the completed copy within 1 pt (CSS pt->px rounding)  [[594.96, 841.92] vs [595.304, 841.89]]
+ok   print: page 1 visibly matches the completed copy (<3% of pixels differ by >64/255 after a 1-2 px shift; MEASURED 2.1%. The print path is a 200 dpi raster re-render with page size rounded by Chromium (594.96 vs 595.30 pt) - NOT byte-identical; Export PDF is the exact route)  [2.13% at shift (-1,
+
+ALL PASSED
+
+=== FINAL package (app.asar 5d1f01df6fea469d...) - in-app forms test on the packaged app, Electron 35.7.5 under Xvfb
+ok   1a import fillable / static / scanned PDF templates  [pages 1/3/1]
+ok   1b stored SHA-256 equals the SHA-256 of the file on disk
+ok   1c native fields detected by the bundled pdf.js 3.11.174: 9 / 0 / 0  [9/0/0]
+ok   1d exact duplicate import rejected
+ok   1e Word files rejected with an honest message
+ok   1f a non-PDF renamed .pdf is rejected by content
+ok   2a instance created for the employee with the related training record  [TR-0001]
+ok   2b related record of ANOTHER employee is rejected
+ok   2c link rows written (FormLinks)
+ok   3a editor shows the 9 native widgets as inputs
+ok   3b user-placed text box created
+ok   3c first revision saved as a separate file (master untouched)  [880768f36a82]
+ok   3d master template still has its original SHA-256 (verifyMaster)
+ok   3e completed copy is a valid PDF  [37885 bytes]
+ok   4 reopen restores typed values, checkbox, dropdown, radio and the text box  [{"id":"EMP001","name":"محمد أحمد عبد العظيم","chk":true,"sel":"Competent","rad":[false,true],"ov":1,"ovt":"ملاحظة: Overl]
+ok   5a static 3-page PDF completed copy saved; instance status Completed
+ok   6a OCR ran inside the app on the scanned page (English + Arabic)  [{"n":82,"ms":3060,"has":["Staff","Training","Assessment"],"ar":28}]
+ok   6b scanned form completed copy saved with an OCR-placed text box
+ok   7a print HTML built from the completed copy (3 page images, A4 page size)  [834284 chars]
+ok   7b print pipeline produced a PDF from the completed copy
+ok   8a completed forms are registered as employee documents (DocMeta) and visible to the competency evidence picker
+ok   8b employee profile lists the filled forms
+ok   8c form tables are part of the backup data set
+ok   9a staff role cannot create a form
+ok   9b staff cannot open another employee's form
+ok   9c staff cannot import templates
+ok   10a tampered master is detected and new forms from it are refused
+ok   10b after restoring the original bytes the master verifies again
+ALL PASSED
+=== independent verification of that run
+ok   static: same page count as master  [3/3]
+ok   static: page 1 pixels changed OUTSIDE the filled boxes = 0  [0 px outside, 4032 px inside]
+ok   static: filled boxes actually changed (text drawn)  [4032 px]
+ok   static: page 2 identical to master
+ok   static: page 3 identical to master
+ok   static: typed English values are real, searchable text
+ok   static: Arabic text present in the PDF text layer
+ok   static: fonts are embedded  [NotoNaskhArabic-Regular-6235         CID TrueType      Ident]
+ok   fillable: same page count as master  [1/1]
+ok   fillable: page 1 pixels changed OUTSIDE the filled boxes = 0  [0 px outside, 16329 px inside]
+ok   fillable: filled boxes actually changed (text drawn)  [16329 px]
+ok   fillable: typed values are real text (ID, date, dropdown choice, English part of the mixed subject)
+ok   fillable: completed copy no longer contains form fields (flattened, layout fixed)
+ok   scanned: only a small area changed (the OCR-placed text box)  [749 px = 0.075% of the page; bbox x 145-283 y 214-228]
+ok   print: same number of pages as the completed copy  [3 vs 3]
+ok   print: page size equals the completed copy within 1 pt (CSS pt->px rounding)  [[594.96, 841.92] vs [595.304, 841.89]]
+ok   print: page 1 visibly matches the completed copy (<3% of pixels differ by >64/255 after a 1-2 px shift; MEASURED 2.1%. The print path is a 200 dpi raster re-render with page size rounded by Chromium (594.96 vs 595.30 pt) - NOT byte-identical; Export PDF is the exact route)  [2.13% at shift (-1,
+
+ALL PASSED

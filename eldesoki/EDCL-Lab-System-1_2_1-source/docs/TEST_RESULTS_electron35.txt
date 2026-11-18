@@ -1,0 +1,12 @@
+Electron 35.7.5 / Chrome 134 (the SAME runtime as the portable exe), Linux under Xvfb, isolated XDG_CONFIG_HOME, 2026-10-23T23:55:36Z
+--- A. packaged clean-rebuild app.asar: IPC smoke (WADA unreachable from sandbox => failure expected and must be reported accurately)
+check(): failed failedSources=4 11s
+first error: dns | dns | 2026-10-23T23:55:55.556Z | net::ERR_NAME_NOT_RESOLVED | DNS lookup failed - check internet/DNS settings
+action: DNS lookup failed. Check the internet connection and DNS settings; confirm www.wada-ama.org opens in a browser on this PC.
+lastSuccess: null | lastRun: failed | notice: Online synchronization is unavailable - showing previously discovered updates.
+items shown while offline: 0 | verify api: function
+--- B. Training Form FO127: save, print window to PDF, restart, reopen
+bridge keys: refocus,pdf,print,savePdf,sqlite,wada,onBeforeClose,closeDone,backup
+saved forms in data: 1 | form no: TF-0001 | type: FO127
+pdf bytes: 99279 | header: %PDF-
+after restart: saved forms: 1 | list row shown: true
