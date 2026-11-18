@@ -176,6 +176,8 @@ function createServer({ dataDir, port = 8443, host = '0.0.0.0', tls = null, back
         return send(res, 200, { version: VERSION, driver: db.kind, seq: db_.curSeq(db), records: db.prepare('SELECT COUNT(*) c FROM records WHERE deleted=0').get().c, files: db.prepare('SELECT COUNT(*) c FROM files WHERE deleted=0').get().c, users: db.prepare('SELECT COUNT(*) c FROM users WHERE active=1').get().c, sessions: db.prepare('SELECT COUNT(*) c FROM sessions WHERE expires>?').get(Date.now()).c, backups: bl, wada: (store.getRecord(db, 'WadaStatus', 'main') || {}).data || null });
       }
       if (!u.perms.users) return send(res, 403, { error: 'Permission denied' });
+      if (p === '/api/admin/roles' && m === 'GET')
+        return send(res, 200, { roles: db.prepare('SELECT role,perms FROM roles ORDER BY role').all().map(r => ({ role: r.role, perms: JSON.parse(r.perms) })) });
       if (p === '/api/admin/users' && m === 'GET')
         return send(res, 200, { users: db.prepare('SELECT username,name,staff_id staffId,role,active,must_change mustChange,locked_until lockedUntil FROM users ORDER BY username').all() });
       if (p === '/api/admin/users' && m === 'POST') {

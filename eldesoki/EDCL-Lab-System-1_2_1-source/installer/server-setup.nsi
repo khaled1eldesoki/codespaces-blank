@@ -192,6 +192,8 @@ Section "Server"
   File "${STAGE}\LICENSE-node.txt"
   File /r "${STAGE}\server"
   File /r "${STAGE}\node_modules"
+  File /r "${STAGE}\dashboard"
+  File /r "${STAGE}\dashboard-app"
   CreateDirectory "$vData"
   CreateDirectory "$vBackup"
   ; certificates, config, first administrator (the one-time password is printed once)
@@ -226,9 +228,10 @@ Section "Server"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EDCLServer" "UninstallString" "$INSTDIR\Uninstall.exe"
   CreateDirectory "$SMPROGRAMS\EDCL Server"
   CreateShortcut "$SMPROGRAMS\EDCL Server\Server folder (client-config, logs).lnk" "explorer.exe" '"$0\EDCL Server"'
-  CreateShortcut "$SMPROGRAMS\EDCL Server\Server control prompt.lnk" "cmd.exe" '/k cd /d "$INSTDIR" && edcl-server-ctl.cmd'
+  CreateShortcut "$SMPROGRAMS\EDCL Server\Server Dashboard.lnk" "$INSTDIR\dashboard\EDCL Server Dashboard.exe" '"$INSTDIR\dashboard-app"' "$INSTDIR\dashboard-app\icon.ico"
+  CreateShortcut "$DESKTOP\EDCL Server Dashboard.lnk" "$INSTDIR\dashboard\EDCL Server Dashboard.exe" '"$INSTDIR\dashboard-app"' "$INSTDIR\dashboard-app\icon.ico"
   ${IfNot} ${Silent}
-    MessageBox MB_ICONINFORMATION "Server installed and started.$\r$\n$\r$\nWRITE DOWN the administrator name and ONE-TIME PASSWORD from the details (field ownerPassword). It is shown only now. If the field is empty an administrator already existed.$\r$\n$\r$\nNext: copy the folder  $0\EDCL Server\client-config  to every workstation, next to EDCL-Client-Setup.exe."
+    MessageBox MB_ICONINFORMATION "Server installed and started. Use EDCL Server Dashboard from the desktop or Start menu for daily administration.$\r$\n$\r$\nWRITE DOWN the administrator name and ONE-TIME PASSWORD from the details (field ownerPassword). It is shown only now. If the field is empty an administrator already existed.$\r$\n$\r$\nNext: copy the folder  $0\EDCL Server\client-config  to every workstation, next to EDCL-Client-Setup.exe."
     ExecShell "open" "$0\EDCL Server\client-config"
   ${EndIf}
 SectionEnd
@@ -245,6 +248,7 @@ Section "Uninstall"
   Sleep 1500
   RMDir /r "$INSTDIR"
   RMDir /r "$SMPROGRAMS\EDCL Server"
+  Delete "$DESKTOP\EDCL Server Dashboard.lnk"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\EDCLServer"
   MessageBox MB_ICONINFORMATION "The server program was removed.$\r$\nThe DATABASE, BACKUPS and CERTIFICATES in $0\EDCL Server (and the folders you chose) were NOT deleted. Delete them yourself only when you are sure."
 SectionEnd

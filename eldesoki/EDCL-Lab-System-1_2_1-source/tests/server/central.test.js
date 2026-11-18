@@ -133,6 +133,10 @@ test('permissions: staff cannot write; staff only read their own StaffID rows; S
   assert.equal((await push(mgr, [{ tbl: 'Settings', id: 's', op: 'put', baseRev: 0, data: { SettingName: 's' } }])).body.results[0].denied, true);
   assert.equal((await push(owner, [{ tbl: 'Settings', id: 's', op: 'put', baseRev: 0, data: { SettingName: 's' } }])).body.results[0].ok, true);
   assert.equal((await api('/api/admin/users', {}, mgr)).status, 403);
+  assert.equal((await api('/api/admin/roles', {}, mgr)).status, 403);
+  const roles = await api('/api/admin/roles', {}, owner);
+  assert.equal(roles.status, 200);
+  assert.ok(roles.body.roles.some(r => r.role === 'admin'));
   assert.equal((await api('/api/admin/users', { body: { username: 'x1', role: 'admin', password: PW } }, await signIn('qa'))).status, 403);
 });
 

@@ -33,6 +33,9 @@ Two installers: **EDCL-Server-Setup.exe** (one PC) and **EDCL-Client-Setup.exe**
 6. Sign in from a workstation and compare employee/training/authorization counts with the old app before retiring it.
 
 ## 5. Daily operation
-- Status: `edcl-server-ctl status`; logs: `edcl-server-ctl logs`; stop/start/restart as named.
+- Open **EDCL Server Dashboard** from the desktop or Start menu on the server PC. Sign in with a server account to view service/API health, record/file/session counts, backup history, WADA status and recent audit events.
+- The dashboard can manage server users and roles, create/verify/restore backups, import a desktop JSON backup, review audit events and logs, renew the HTTPS server certificate, and edit operational settings. Restore/import require the server to be stopped; import only works on an empty database. Configuration changes take effect after restart.
+- Start/stop/restart controls operate on the local Windows server task. If Windows reports an access-denied error, close the dashboard and reopen it with **Run as administrator**. The command-line control script remains available for recovery and automation.
+- The dashboard is local to the server PC and does not add remote service-control endpoints. Workstations continue to use the EDCL client and the HTTPS API.
 - Roles/permissions in the app's Users & Roles screen create accounts on the server. **Role permissions are enforced by the server with its built-in role table**; changing the permission matrix screen in the app does not change what the server allows (see Known limitations in the test report).
 - Staff-role users receive only their own records plus reference data (server-side filtering).

@@ -1,0 +1,8 @@
+{
+  "name": "edcl-server-dashboard",
+  "productName": "EDCL Server Dashboard",
+  "version": "1.2.1",
+  "description": "Local desktop administration dashboard for the EDCL central server",
+  "main": "main.js",
+  "private": true
+}
