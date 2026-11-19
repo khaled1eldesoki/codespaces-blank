@@ -3,12 +3,22 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('serverDashboard', {
-  health: () => ipcRenderer.invoke('dashboard:health'),
+  health: options => ipcRenderer.invoke('dashboard:health', options),
   login: credentials => ipcRenderer.invoke('dashboard:login', credentials),
   changePassword: credentials => ipcRenderer.invoke('dashboard:change-password', credentials),
   logout: () => ipcRenderer.invoke('dashboard:logout'),
   request: request => ipcRenderer.invoke('dashboard:request', request),
   service: action => ipcRenderer.invoke('dashboard:service', action),
+  connection: {
+    get: () => ipcRenderer.invoke('dashboard:connection:get'),
+    chooseCa: () => ipcRenderer.invoke('dashboard:connection:choose-ca'),
+    save: input => ipcRenderer.invoke('dashboard:connection:save', input)
+  },
+  setup: {
+    state: () => ipcRenderer.invoke('dashboard:setup:state'),
+    createOwner: input => ipcRenderer.invoke('dashboard:setup:owner', input),
+    recoverOwner: input => ipcRenderer.invoke('dashboard:recover-owner', input)
+  },
   config: {
     get: () => ipcRenderer.invoke('dashboard:config:get'),
     save: changes => ipcRenderer.invoke('dashboard:config:save', changes)

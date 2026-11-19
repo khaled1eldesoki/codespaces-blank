@@ -107,4 +107,4 @@ async function resetPassword(db, username, newPw) {
   db.prepare('DELETE FROM sessions WHERE username=?').run(username);
   return r.changes > 0;
 }
-module.exports = { DEFAULT_ROLES, seedRoles, permsOf, createUser, login, verifyPassword, authenticate, logout, changePassword, resetPassword, legacyHash, hashPassword };
+module.exports = { IDLE_MS, DEFAULT_ROLES, seedRoles, permsOf, createUser, login, verifyPassword, authenticate, logout, changePassword, resetPassword, legacyHash, hashPassword };

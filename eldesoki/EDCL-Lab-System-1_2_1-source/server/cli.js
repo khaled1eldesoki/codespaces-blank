@@ -47,7 +47,7 @@ const pw = () => crypto.randomBytes(12).toString('base64url');
     if (runningPid(cfg.dataDir)) throw new Error('A server is already running for ' + cfg.dataDir + ' (pid ' + runningPid(cfg.dataDir) + ')');
     const tls = cfg.tlsKey && cfg.tlsCert ? { key: cfg.tlsKey, cert: cfg.tlsCert } : null;
     if (!tls && !flag('allow-http')) throw new Error('Refusing to start without HTTPS (passwords would cross the network readable). Run make-certs first, or add --allow-http for a local test only.');
-    const s = createServer({ dataDir: cfg.dataDir, tls, port: cfg.port, host: cfg.host, backupEveryMs: cfg.backupMinutes * 60000, keepBackups: cfg.keepBackups, backupDir: cfg.backupDir, wadaHours: cfg.wadaHours, maxFileBytes: cfg.maxFileMB * 1048576, serverName: cfg.serverName, log: (...a) => console.error(new Date().toISOString(), ...a) });
+    const s = createServer({ dataDir: cfg.dataDir, tls, port: cfg.port, host: cfg.host, backupEveryMs: cfg.backupMinutes * 60000, keepBackups: cfg.keepBackups, backupDir: cfg.backupDir, wadaHours: cfg.wadaHours, maxFileBytes: cfg.maxFileMB * 1048576, serverName: cfg.serverName, configFile: arg('config', '') ? path.resolve(arg('config', '')) : '', onRestart: () => down(), log: (...a) => console.error(new Date().toISOString(), ...a) });
     const a = await s.start();
     fs.writeFileSync(lockFile(cfg.dataDir), process.pid + '\n' + new Date().toISOString());
     console.log(`${new Date().toISOString()} EDCL central server (${tls ? 'HTTPS' : 'PLAIN HTTP - TEST ONLY'}) listening on ${a.address}:${a.port}, data: ${cfg.dataDir}, backups: ${s.bkRoot}`);

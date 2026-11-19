@@ -11,9 +11,12 @@
 <body>
   <aside class="sidebar">
     <div class="brand"><div class="brand-icon">E</div><div><strong>EDCL</strong><small>SERVER CONTROL</small></div></div>
-    <div class="nav-label">MANAGEMENT</div>
+    <div class="nav-label">MONITOR</div>
     <nav id="navigation">
       <button class="nav-item active" data-view="overview"><span>◈</span>Overview</button>
+      <button class="nav-item" data-view="sessions" hidden><span>◉</span>Connected users</button>
+      <button class="nav-item" data-view="files" hidden><span>▣</span>Stored files</button>
+      <div class="nav-label">MANAGEMENT</div>
       <button class="nav-item" data-view="users"><span>♙</span>Users &amp; roles</button>
       <button class="nav-item" data-view="backups"><span>▤</span>Backups &amp; recovery</button>
       <button class="nav-item" data-view="audit"><span>☷</span>Audit log</button>
@@ -21,37 +24,49 @@
       <button class="nav-item" data-view="logs"><span>≋</span>Server logs</button>
     </nav>
     <div class="side-footer">
-      <div class="secure-mark">● <span>Administration is local to this PC</span></div>
+      <div class="secure-mark">● <span id="side-connection">Not connected</span></div>
+      <button id="connection-open" class="button quiet side-button">Server connection…</button>
       <div id="version">Server dashboard</div>
     </div>
   </aside>
   <main>
     <header class="topbar">
-      <div><div class="eyebrow">CENTRAL LABORATORY SERVER</div><h1 id="page-title">Overview</h1></div>
+      <div><div class="eyebrow" id="server-name">CENTRAL LABORATORY SERVER</div><h1 id="page-title">Overview</h1></div>
       <div class="top-actions">
         <div id="connection" class="connection"><i></i><span>Checking server</span></div>
-        <button id="refresh" class="button secondary">Refresh</button>
+        <label class="refresh-select" title="How often the dashboard refreshes">Refresh <select id="refresh-interval"><option value="5000">5 s</option><option value="10000" selected>10 s</option><option value="30000">30 s</option><option value="0">Paused</option></select></label>
+        <button id="refresh" class="button secondary">Refresh now</button>
         <div id="account" class="account" hidden><span id="account-name"></span><button id="signout" class="button quiet">Sign out</button></div>
         <button id="signin-open" class="button">Sign in</button>
       </div>
     </header>
     <div id="notice" class="notice" role="status" hidden></div>
+
     <section id="overview" class="view">
-      <div class="welcome-row">
-        <div><h2>Server health at a glance</h2><p>Live operational status and service activity for this EDCL server.</p></div>
-        <div id="last-updated" class="muted">Waiting for status…</div>
-      </div>
-      <div id="stat-cards" class="stats">
+      <div id="alerts" class="alerts"></div>
+      <div id="stat-cards" class="stats six">
         <article class="stat"><span>Server status</span><strong id="stat-status">Checking</strong><small id="stat-version">—</small></article>
         <article class="stat"><span>Records</span><strong id="stat-records">—</strong><small>Active laboratory records</small></article>
-        <article class="stat"><span>Files</span><strong id="stat-files">—</strong><small>Active stored documents</small></article>
-        <article class="stat"><span>Sessions</span><strong id="stat-sessions">—</strong><small id="stat-users">— active accounts</small></article>
+        <article class="stat"><span>Stored files</span><strong id="stat-files">—</strong><small id="stat-files-size">Active documents</small></article>
+        <article class="stat"><span>Active sessions</span><strong id="stat-sessions">—</strong><small id="stat-users">— active accounts</small></article>
+        <article class="stat"><span>Requests / min</span><strong id="stat-rpm">—</strong><small id="stat-errors">—</small></article>
+        <article class="stat"><span>Latest backup</span><strong id="stat-backup">—</strong><small id="stat-backup-note">—</small></article>
       </div>
-      <div class="grid two">
+      <div class="grid two charts" id="charts">
+        <article class="panel chart-panel"><div class="chart-head"><h3>Requests per minute</h3><b id="chart-rpm-now">—</b></div><div id="chart-rpm" class="chart"></div><small id="chart-rpm-note" class="chart-note"></small></article>
+        <article class="panel chart-panel"><div class="chart-head"><h3>Active sessions</h3><b id="chart-sessions-now">—</b></div><div id="chart-sessions" class="chart"></div><small id="chart-sessions-note" class="chart-note"></small></article>
+        <article class="panel chart-panel"><div class="chart-head"><h3>Response time (average, ms)</h3><b id="chart-ms-now">—</b></div><div id="chart-ms" class="chart"></div><small id="chart-ms-note" class="chart-note"></small></article>
+        <article class="panel chart-panel"><div class="chart-head"><h3>Server memory (MB)</h3><b id="chart-mem-now">—</b></div><div id="chart-mem" class="chart"></div><small id="chart-mem-note" class="chart-note"></small></article>
+      </div>
+      <div class="grid three">
         <article class="panel">
-          <div class="panel-heading"><div><h3>Server service</h3><p>Windows scheduled task and HTTPS endpoint</p></div><span id="service-badge" class="badge neutral">Checking</span></div>
-          <div class="service-details"><div><span>Service</span><strong id="service-state">—</strong></div><div><span>API endpoint</span><strong id="endpoint-state">—</strong></div><div><span>Database driver</span><strong id="stat-driver">—</strong></div><div><span>Sync sequence</span><strong id="stat-seq">—</strong></div></div>
+          <div class="panel-heading"><div><h3>Server service</h3><p id="service-sub">Windows scheduled task and HTTPS endpoint</p></div><span id="service-badge" class="badge neutral">Checking</span></div>
+          <div class="service-details"><div><span>Service</span><strong id="service-state">—</strong></div><div><span>API endpoint</span><strong id="endpoint-state">—</strong></div><div><span>Uptime</span><strong id="stat-uptime">—</strong></div><div><span>Sync sequence</span><strong id="stat-seq">—</strong></div><div><span>Database driver</span><strong id="stat-driver">—</strong></div><div><span>Host · process</span><strong id="stat-host">—</strong></div></div>
           <div class="button-row"><button class="button" data-service="start">Start</button><button class="button secondary" data-service="restart">Restart</button><button class="button danger-outline" data-service="stop">Stop</button></div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Storage</h3><p>Database, documents and free disk space</p></div></div>
+          <div id="storage" class="empty-message">Sign in to view storage.</div>
         </article>
         <article class="panel">
           <div class="panel-heading"><div><h3>Backup health</h3><p>Verified server-side database snapshots</p></div><span id="backup-badge" class="badge neutral">Sign in to view</span></div>
@@ -59,11 +74,31 @@
           <button id="quick-backup" class="button secondary" hidden>Create a verified backup</button>
         </article>
       </div>
-      <div class="grid two">
+      <div class="grid three">
+        <article class="panel"><div class="panel-heading"><div><h3>Security</h3><p>Sign-ins and certificate</p></div></div><div id="security" class="empty-message">Sign in to view.</div></article>
         <article class="panel"><div class="panel-heading"><div><h3>WADA monitor</h3><p>Latest status stored by the server</p></div></div><div id="wada-status" class="empty-message">Sign in to view monitor status.</div></article>
         <article class="panel"><div class="panel-heading"><div><h3>Recent activity</h3><p>Newest administrative events</p></div></div><div id="recent-audit" class="empty-message">Sign in with audit access to view events.</div></article>
       </div>
     </section>
+
+    <section id="sessions" class="view" hidden>
+      <div class="view-intro"><div><h2>Connected users</h2><p>Everyone currently signed in on a workstation or on this dashboard. Signing someone out ends their session immediately.</p></div><div id="sessions-summary" class="muted"></div></div>
+      <div class="panel table-panel"><div id="sessions-table" class="table-wrap"></div></div>
+    </section>
+
+    <section id="files" class="view" hidden>
+      <div class="view-intro"><div><h2>Stored files</h2><p>Documents, evidence and completed forms held by the server. Bytes are checked against their SHA-256 fingerprint.</p></div><div class="button-row"><button id="verify-files" class="button">Verify file integrity</button></div></div>
+      <div id="files-check" class="panel check-panel" hidden></div>
+      <div id="files-groups" class="role-summary"></div>
+      <div class="panel filter-bar">
+        <input id="files-search" type="search" placeholder="Search name, code, category or uploader" maxlength="80" aria-label="Search files">
+        <select id="files-cat" class="select" aria-label="Category"><option value="">All categories</option></select>
+        <label class="check"><input id="files-deleted" type="checkbox"> Show deleted</label>
+      </div>
+      <div class="panel table-panel"><div id="files-table" class="table-wrap"></div></div>
+      <div class="pager"><button id="files-prev" class="button secondary">‹ Previous</button><span id="files-page" class="muted"></span><button id="files-next" class="button secondary">Next ›</button></div>
+    </section>
+
     <section id="users" class="view" hidden>
       <div class="view-intro"><div><h2>Users &amp; roles</h2><p>Manage server accounts, access roles, and password resets.</p></div><button id="create-user-open" class="button">＋ Create user</button></div>
       <div id="role-summary" class="role-summary"></div>
@@ -71,7 +106,7 @@
     </section>
     <section id="backups" class="view" hidden>
       <div class="view-intro"><div><h2>Backups &amp; recovery</h2><p>Create verified snapshots, validate a backup, or restore server data.</p></div><div class="button-row"><button id="import-backup" class="button secondary">Import desktop backup</button><button id="create-backup" class="button">Create backup</button></div></div>
-      <div class="callout warning"><strong>Restore requires the server to be stopped.</strong> A restore first preserves the current database in a pre-restore folder. Uploaded file bytes are recovered from the backup mirror when available.</div>
+      <div id="backup-dir" class="muted backup-dir"></div>
       <div class="panel table-panel"><div id="backups-table" class="table-wrap"></div></div>
     </section>
     <section id="audit" class="view" hidden>
@@ -83,7 +118,7 @@
       <div class="grid two settings-grid">
         <form id="config-form" class="panel form-panel">
           <h3>Operational settings</h3>
-          <p>Changes take effect after the server is restarted.</p>
+          <p id="config-note">Changes take effect after the server is restarted.</p>
           <label>Server display name<input name="serverName" maxlength="80" required></label>
           <label>Backup folder<input name="backupDir" maxlength="400" required></label>
           <div class="form-grid">
@@ -101,15 +136,15 @@
           <div class="read-only"><span>Database folder</span><strong id="config-data">—</strong></div>
           <div class="read-only"><span>HTTPS certificate expires</span><strong id="cert-expiry">—</strong><small id="cert-fingerprint"></small><button id="renew-cert" class="button secondary">Renew certificate and restart</button></div>
           <div class="read-only"><span>Client connection package</span><button id="open-client-config" class="button secondary">Open folder</button></div>
-          <div class="callout">TLS certificates and network identity are not editable here. Renewal preserves the current trusted CA and names. The server task runs as SYSTEM, so choose a backup folder that SYSTEM can write to. Run this dashboard as administrator for local service, certificate, log, and recovery operations.</div>
         </article>
       </div>
     </section>
     <section id="logs" class="view" hidden>
-      <div class="view-intro"><div><h2>Server logs</h2><p>Latest local service log. The view is limited to the last 500 lines.</p></div><button id="refresh-logs" class="button secondary">Refresh logs</button></div>
+      <div class="view-intro"><div><h2>Server logs</h2><p>Latest server activity (last 500 lines).</p></div><div class="button-row"><label class="check"><input id="logs-follow" type="checkbox" checked> Follow live</label><button id="refresh-logs" class="button secondary">Refresh logs</button></div></div>
       <div class="panel log-panel"><div id="log-name" class="log-name">No log loaded</div><pre id="log-output" class="log-output"></pre></div>
     </section>
   </main>
+
   <div id="login-modal" class="modal" hidden>
     <form id="login-form" class="dialog">
       <button class="close" type="button" data-close="login-modal" aria-label="Close">×</button><div class="dialog-mark">E</div>
@@ -117,6 +152,7 @@
       <label>Username<input name="username" autocomplete="username" required></label>
       <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
       <div id="login-error" class="inline-error"></div><button class="button wide" type="submit">Sign in securely</button>
+      <button id="recover-open" class="button quiet wide" type="button" hidden>Forgot a password? (server PC, administrator)</button>
     </form>
   </div>
   <div id="password-modal" class="modal" hidden>
@@ -131,7 +167,7 @@
   <div id="user-modal" class="modal" hidden>
     <form id="user-form" class="dialog">
       <button class="close" type="button" data-close="user-modal" aria-label="Close">×</button><div class="eyebrow">SERVER ACCOUNT</div><h2>Create a user</h2><p>A one-time password will be generated and displayed once. The user must change it at first sign-in.</p>
-      <label>Username<input name="username" autocomplete="off" minlength="2" maxlength="40" pattern="[a-zA-Z0-9._-]+" required></label>
+      <label>Username<input name="username" autocomplete="off" minlength="2" maxlength="40" pattern="[a-zA-Z0-9._\-]+" required></label>
       <label>Full name<input name="name" maxlength="100" required></label>
       <label>Staff ID (optional)<input name="staffId" maxlength="80"></label>
       <label>Role<select name="role" required></select></label>
@@ -143,6 +179,36 @@
       <button class="close" type="button" data-close="secret-modal" aria-label="Close">×</button><div class="eyebrow">SHOWN ONCE</div><h2 id="secret-title">One-time password</h2><p>Copy this password now and deliver it securely to the user. It will not be shown again.</p>
       <output id="secret-value" class="secret-value"></output><button id="copy-secret" class="button secondary wide">Copy password</button><button class="button wide" data-close="secret-modal">Done</button>
     </div>
+  </div>
+  <div id="setup-modal" class="modal" hidden>
+    <form id="setup-form" class="dialog">
+      <div class="dialog-mark">E</div><div class="eyebrow">FIRST-TIME SETUP</div><h2>Create the system administrator</h2><p>This server has no administrator yet. Create the owner account now - you will use it to sign in here and in the EDCL client. Choose a password of at least 10 characters.</p>
+      <label>Username<input name="username" autocomplete="off" minlength="2" maxlength="40" pattern="[a-zA-Z0-9._\-]+" value="admin" required></label>
+      <label>Full name<input name="name" maxlength="100" value="System Owner" required></label>
+      <label>Password<input name="password" type="password" autocomplete="new-password" minlength="10" required></label>
+      <label>Confirm password<input name="confirm" type="password" autocomplete="new-password" minlength="10" required></label>
+      <div id="setup-error" class="inline-error"></div><button class="button wide" type="submit">Create administrator</button>
+    </form>
+  </div>
+  <div id="connection-modal" class="modal" hidden>
+    <form id="connection-form" class="dialog">
+      <button class="close" type="button" data-close="connection-modal" aria-label="Close">×</button><div class="eyebrow">SERVER CONNECTION</div><h2>Which server?</h2><p>Monitor the server on this PC, or connect from any other PC. A remote connection needs the server address and the lab's CA certificate (<b>ca.crt</b> from the server's <b>client-config</b> folder).</p>
+      <label class="radio"><input type="radio" name="mode" value="local"> This PC (the EDCL Server is installed here)</label>
+      <label class="radio"><input type="radio" name="mode" value="remote"> Another server on the network</label>
+      <div id="remote-fields">
+        <label>Server address<input name="serverUrl" placeholder="https://edcl-server:8443" maxlength="200"></label>
+        <div class="ca-row"><button id="choose-ca" type="button" class="button secondary">Choose ca.crt…</button><span id="ca-info" class="muted">No certificate chosen</span></div>
+        <small class="muted">Compare the fingerprint with the one in the server's README.txt before saving.</small>
+      </div>
+      <div id="connection-error" class="inline-error"></div><button class="button wide" type="submit">Save and test connection</button>
+    </form>
+  </div>
+  <div id="recover-modal" class="modal" hidden>
+    <form id="recover-form" class="dialog">
+      <button class="close" type="button" data-close="recover-modal" aria-label="Close">×</button><div class="eyebrow">ACCOUNT RECOVERY</div><h2>Reset a forgotten password</h2><p>Available only on the server PC and only when this dashboard was opened with <b>Run as administrator</b>. A new one-time password is generated; the user must change it at the next sign-in.</p>
+      <label>User name<input name="username" autocomplete="off" maxlength="40" required></label>
+      <div id="recover-error" class="inline-error"></div><button class="button wide" type="submit">Reset password</button>
+    </form>
   </div>
 </body>
 </html>
