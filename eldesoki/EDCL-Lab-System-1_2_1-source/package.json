@@ -12,12 +12,13 @@
     "test:persistence": "node tests/competency-persistence.test.js",
     "test:engine": "node --test tests/forms-engine.test.js",
     "test:server": "node --test \"tests/server/*.test.js\"",
-    "test": "npm run test:monitor && npm run test:ui && npm run test:persistence && npm run test:engine && npm run test:server",
+    "test": "npm run test:monitor && npm run test:ui && npm run test:persistence && npm run test:engine && npm run test:server && npm run test:dashboard",
     "build:portable": "bash tools/make-portable.sh",
     "build:vendor": "bash tools/build-vendor.sh",
     "server:start": "node server/cli.js start",
     "test:e2e": "xvfb-run -a node tests/electron/central-e2e.js",
-    "build:installers": "bash tools/build-installers.sh"
+    "build:installers": "bash tools/build-installers.sh",
+    "test:dashboard": "node tests/dashboard/e2e.test.js"
   },
   "dependencies": {
     "better-sqlite3": "13.0.3",
